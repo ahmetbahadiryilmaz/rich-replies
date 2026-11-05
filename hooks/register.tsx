@@ -212,8 +212,8 @@ export function hizala(segs: Seg[], w: number, hiza: Hiza): Seg[] {
 }
 
 // Hücre metni -> renkli parçalar.
-export function hucreSeg(h: string): Seg[] {
-  return parcala(h).flatMap(p => satirIci(p.metin).map(s => ({ t: s.t, renk: p.renk, bold: s.bold, mono: s.mono })))
+export function hucreSeg(hucreMetni: string): Seg[] {
+  return parcala(hucreMetni).flatMap(p => satirIci(p.metin).map(s => ({ t: s.t, renk: p.renk, bold: s.bold, mono: s.mono })))
 }
 
 // Tablo satırını hücrelere böler (\| kaçışı korunur).
@@ -483,17 +483,17 @@ export function resimBoyutu(b: Uint8Array): { bicim: Bicimi; en: number; boy: nu
 }
 
 // Gösterim ölçüsü: en çok 640 geniş, oran korunur, küçük resim büyütülmez.
-export function gosterimOlcusu(en: number, boy: number): { w: number; h: number } {
+export function gosterimOlcusu(en: number, boy: number): { w: number; yuk: number } {
   const w = Math.min(GOSTERIM_EN_MAX, en)
-  return { w, h: Math.max(1, Math.round((boy * w) / en)) }
+  return { w, yuk: Math.max(1, Math.round((boy * w) / en)) }
 }
 
-export function svgYap(r: Resim): { source: string; w: number; h: number } {
-  const { w, h } = gosterimOlcusu(r.en, r.boy)
+export function svgYap(r: Resim): { source: string; w: number; yuk: number } {
+  const { w, yuk } = gosterimOlcusu(r.en, r.boy)
   const source =
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">` +
-    `<image href="data:image/${r.bicim};base64,${r.base64}" width="${w}" height="${h}"/></svg>`
-  return { source, w, h }
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${yuk}" viewBox="0 0 ${w} ${yuk}">` +
+    `<image href="data:image/${r.bicim};base64,${r.base64}" width="${w}" height="${yuk}"/></svg>`
+  return { source, w, yuk }
 }
 
 // Aynı dosya tekrar okunmasın: başarılı sonuçlar kısa süre bellekte tutulur (mod yeniden yüklenince sıfırlanır).
@@ -599,14 +599,14 @@ export const register: Register = on => {
               if (r.bayt > TERMINAL_MAX) return <Text key={`b${i}`}>{yerTutucu(b.yol, `büyük: ${boyutMetni(r.bayt)}`)}</Text>
               const olcu = gosterimOlcusu(r.en, r.boy)
               const kolon = Math.max(1, Math.min(80, Math.ceil(olcu.w / 8)))
-              const satir = Math.max(1, Math.min(255, Math.ceil((olcu.h * ((kolon * 8) / olcu.w)) / 16)))
+              const satir = Math.max(1, Math.min(255, Math.ceil((olcu.yuk * ((kolon * 8) / olcu.w)) / 16)))
               const { Image } = $.ui.resolve(e)
               return <Image key={`b${i}`} source={{ png: r.base64 }} columns={kolon} rows={satir} alt={alt} />
             }
             const { Svg } = $.ui.resolve(e)
             const svg = svgYap(r)
             if (svg.source.length > SVG_MAX) return <Text key={`b${i}`}>{yerTutucu(b.yol, `büyük: ${boyutMetni(r.bayt)}`)}</Text>
-            return <Svg key={`b${i}`} source={svg.source} alt={alt} width={svg.w} height={svg.h} />
+            return <Svg key={`b${i}`} source={svg.source} alt={alt} width={svg.w} height={svg.yuk} />
           }
           if (b.tur === 'tablo') {
             // Sabit sütun genişlikli ızgara: başlık kalın, ince ayraç, renkli hücreler.
