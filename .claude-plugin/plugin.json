@@ -1,0 +1,17 @@
+{
+  "name": "rich-replies",
+  "displayName": "Rich Replies",
+  "version": "0.1.0",
+  "description": "Renders colored text, task progress bars, aligned tables and inline local images in Claude's replies (Claude Code mod).",
+  "author": { "name": "Ahmet Bahadır Yılmaz", "url": "https://github.com/ahmetbahadiryilmaz" },
+  "license": "MIT",
+  "homepage": "https://github.com/ahmetbahadiryilmaz/rich-replies",
+  "repository": "https://github.com/ahmetbahadiryilmaz/rich-replies",
+  "keywords": ["mod", "rendering", "tables", "progress", "colors", "images"],
+  "icon": "./icon.png",
+  "types": "./types/index.d.ts",
+  "documentationUrl": "https://github.com/ahmetbahadiryilmaz/rich-replies#readme",
+  "supportUrl": "https://github.com/ahmetbahadiryilmaz/rich-replies/issues",
+  "privacyPolicyUrl": "https://github.com/ahmetbahadiryilmaz/rich-replies/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/ahmetbahadiryilmaz/rich-replies/blob/main/TERMS.md"
+}
